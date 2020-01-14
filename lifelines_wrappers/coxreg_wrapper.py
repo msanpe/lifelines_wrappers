@@ -1,5 +1,6 @@
 from lifelines import CoxPHFitter
 from sklearn.base import BaseEstimator
+from pandas import read_json
 
 
 class CoxRegression(BaseEstimator):
@@ -38,10 +39,11 @@ class CoxRegression(BaseEstimator):
     def predict(self, X):
         self.check_fitted_model()
 
+
         if self.prediction_type == 'survival':
-            prediction = self.estimator.predict_survival_function(X)
+            prediction = self.estimator.predict_survival_function(read_json(X, orient='split'))
         else:
-            prediction = self.estimator.predict_expectation(X)[0].values
+            prediction = self.estimator.predict_expectation(read_json(X, orient='split'))[0].values
 
         return prediction
 
